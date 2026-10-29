@@ -100,15 +100,22 @@ $$('dialog').forEach(dialog => dialog.addEventListener('click', event => { if (e
 
 function route() {
   const name = location.hash.slice(1).split('?')[0] || 'home';
+  if (name === 'main') { $('#main').focus(); return; }
+  $('.site-header').classList.remove('menu-open'); $('#menu-toggle').setAttribute('aria-expanded','false');
   const page = $(`[data-page="${CSS.escape(name)}"]`) || $('[data-page="home"]');
   $$('.page').forEach(item => { item.hidden = item !== page; });
-  $$('[data-nav]').forEach(link => link.classList.toggle('active', link.dataset.nav === page.dataset.page));
+  $$('video').forEach(video => { if (video.closest('.page')?.hidden) video.pause(); });
+  $$('[data-nav]').forEach(link => { const active=link.dataset.nav === page.dataset.page; link.classList.toggle('active',active); if(active) link.setAttribute('aria-current','page'); else link.removeAttribute('aria-current'); });
+  const names={home:'Good memories. Made tangible.',studio:'Design studio',collections:'The memory edit',notebook:'My notebook',research:'Research notebook'};
+  document.title=`REPLAY LAB — ${names[page.dataset.page]}`;
   if (page.dataset.page === 'studio') renderStudio();
   if (page.dataset.page === 'notebook') renderNotebook();
   if (page.dataset.page === 'research') initSurvey();
   window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
 window.addEventListener('hashchange', route);
+$('#menu-toggle').addEventListener('click',()=>{const open=$('.site-header').classList.toggle('menu-open');$('#menu-toggle').setAttribute('aria-expanded',String(open));});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){$('.site-header').classList.remove('menu-open');$('#menu-toggle').setAttribute('aria-expanded','false');}});
 
 function updateBagCount() { $('#bag-count').textContent = store.bag.reduce((sum, item) => sum + item.qty, 0); }
 function priceFor(item) {
@@ -120,10 +127,13 @@ function describe(item) {
   return `${item.size} ${item.type} · ${feel} · ${scent} · ${item.sound}`;
 }
 function commit(patch) {
+  const focused=document.activeElement;
+  const restore=focused?.tagName==='BUTTON' && $('#controls').contains(focused) ? {text:focused.textContent,label:focused.getAttribute('aria-label')} : null;
   design = { ...design, ...patch };
   if (patch.id === null) delete design.id;
   history = history.slice(0, historyIndex + 1); history.push(clone(design)); historyIndex++;
   store.draft = clone(design); persist(); renderStudio();
+  if(restore)$$('button',$('#controls')).find(button=>button.textContent===restore.text&&button.getAttribute('aria-label')===restore.label)?.focus({preventScroll:true});
 }
 
 function buttonGroup(label, key, options) {
@@ -184,7 +194,12 @@ function renderControls() {
 function renderStudio() {
   if (!$('#design-canvas')) return;
   $$('[data-type]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.type === design.type)));
-  $$('[data-tab]').forEach(button => button.setAttribute('aria-selected', String(button.dataset.tab === activeTab)));
+  $$('[data-tab]').forEach(button => {const active=button.dataset.tab === activeTab;button.id=`tab-${button.dataset.tab}`;button.setAttribute('aria-selected',String(active));button.setAttribute('aria-controls','controls');button.tabIndex=active?0:-1;});
+  $('#controls').setAttribute('aria-labelledby',`tab-${activeTab}`);
+  const step=['shape','colour','feel','story'].indexOf(activeTab);
+  $('#step-count').textContent=`0${step+1} / 04`;$('#previous-step').disabled=step===0;
+  $('#next-step').textContent=step===3?'Save design ↗':`Next: ${['shape','colour','feel','story'][step+1]} →`;
+  renderRecipe();
   renderControls(); drawToy($('#design-canvas'), design, { squish: squishAmount });
   $('#preview-name').textContent = design.name; $('#preview-desc').textContent = describe(design);
   $('#design-price').textContent = money(priceFor(design)); $('#stage-label').textContent = design.type === 'slime' ? `${design.texture.toUpperCase()} SLIME` : `${design.texture.toUpperCase()} SQUISHY`;
@@ -196,7 +211,22 @@ $$('[data-type]').forEach(button => button.addEventListener('click', () => {
   const type = button.dataset.type; if (type === design.type) return;
   commit({ type, shape: type === 'slime' ? 'jar' : 'peach', texture: type === 'slime' ? 'cloud' : 'slow-rise' });
 }));
-$$('[data-tab]').forEach(button => button.addEventListener('click', () => { activeTab = button.dataset.tab; renderStudio(); }));
+function setStep(tab) { activeTab=tab;renderStudio(); }
+const steps=['shape','colour','feel','story'];
+$$('[data-tab]').forEach(button => {
+  button.addEventListener('click',()=>setStep(button.dataset.tab));
+  button.addEventListener('keydown',event=>{let index=steps.indexOf(activeTab);if(event.key==='ArrowRight')index=(index+1)%4;else if(event.key==='ArrowLeft')index=(index+3)%4;else if(event.key==='Home')index=0;else if(event.key==='End')index=3;else return;event.preventDefault();setStep(steps[index]);$(`[data-tab="${activeTab}"]`).focus();});
+});
+$('#previous-step').addEventListener('click',()=>setStep(steps[Math.max(0,steps.indexOf(activeTab)-1)]));
+$('#next-step').addEventListener('click',()=>{if(activeTab==='story')$('#save-design').click();else setStep(steps[steps.indexOf(activeTab)+1]);});
+function renderRecipe() {
+  const rows=[['Product',`${design.size} ${design.type}`],['Feel',design.texture],['Scent',design.scent==='none'?'Unscented':design.scent],['Sound',design.sound],['Base design',money(design.type==='slime'?299:349)]];
+  if(design.size!=='small')rows.push(['Size upgrade',`+${money(design.size==='medium'?50:100)}`]);
+  if(design.garnish!=='none')rows.push(['Finishing touch',`+${money(20)}`]);
+  if(design.sleeve)rows.push(['Gift sleeve',`+${money(40)}`]);
+  rows.push(['Demo total',money(priceFor(design))]);
+  const root=$('#recipe-summary');root.replaceChildren();rows.forEach(([label,value])=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;root.append(dt,dd);});
+}
 $('#undo').addEventListener('click', () => { if (historyIndex > 0) { design = clone(history[--historyIndex]); store.draft = clone(design); persist(); renderStudio(); } });
 $('#redo').addEventListener('click', () => { if (historyIndex < history.length - 1) { design = clone(history[++historyIndex]); store.draft = clone(design); persist(); renderStudio(); } });
 $('#reset-design').addEventListener('click', () => commit({ ...clone(defaults), id: null }));
@@ -235,16 +265,36 @@ $('#share-design').addEventListener('click', async () => {
 function collectionCard(item) {
   const article = document.createElement('article'); article.className = 'collection-card';
   const image = document.createElement('div'); image.className = 'collection-image'; const canvas = document.createElement('canvas'); canvas.width = 500; canvas.height = 360; image.append(canvas);
+  const edition=document.createElement('span');edition.className='collection-edition';edition.textContent=`MEMORY / 0${collections.indexOf(item)+1}`;
+  const kind=document.createElement('span');kind.className='collection-type';kind.textContent=item.type;image.append(edition,kind);canvas.setAttribute('role','img');canvas.setAttribute('aria-label',item.title+' pixel concept');
   const body = document.createElement('div'); body.className = 'collection-body';
   const small = document.createElement('span'); small.className = 'eyebrow'; small.textContent = item.subtitle;
   const title = document.createElement('h3'); title.textContent = item.title; const copy = document.createElement('p'); copy.textContent = item.memory;
   const row = document.createElement('div'); row.className = 'button-row';
   const customise = document.createElement('button'); customise.className = 'button small'; customise.textContent = 'Remix this ↗'; customise.addEventListener('click', () => { const { id, title, subtitle, price, ...settings } = item; commit({ ...defaults, ...settings, id: null, name: title }); location.hash = 'studio'; });
   const vote = document.createElement('button'); vote.className = 'text-link'; const voted = () => store.votes.includes(item.id); const label = () => vote.textContent = voted() ? '♥ Saved as favourite' : '♡ I’d like this drop'; label(); vote.addEventListener('click', () => { store.votes = voted() ? store.votes.filter(id => id !== item.id) : [...store.votes, item.id]; persist(); renderCollections(); toast(voted() ? 'Saved as a local favourite.' : 'Favourite removed.'); });
-  row.append(customise, vote); body.append(small, title, copy, row); article.append(image, body);
-  requestAnimationFrame(() => drawToy(canvas, item)); return article;
+  const meta=document.createElement('div');meta.className='collection-meta';const price=document.createElement('strong');price.textContent=money(priceFor({...defaults,...item}));const note=document.createElement('span');note.textContent='Demo concept price';meta.append(price,note);
+  row.append(customise, vote); body.append(small, title, copy, meta, row); article.append(image, body);
+  requestAnimationFrame(() => drawToy(canvas, item, {background:false})); return article;
 }
-function renderCollections() { ['home-collections','all-collections'].forEach(id => { const root = $(`#${id}`); root.replaceChildren(...collections.map(collectionCard)); }); }
+let collectionFilter='all';
+function renderCollections() {
+  const filtered=collections.filter(item=>collectionFilter==='all'||item.type===collectionFilter);
+  $('#home-collections').replaceChildren(...collections.map(collectionCard));
+  $('#all-collections').replaceChildren(...filtered.map(collectionCard));
+  $('#collection-count').textContent=`${filtered.length} concept${filtered.length===1?'':'s'}`;
+  $$('[data-filter]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filter===collectionFilter)));
+}
+$$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{collectionFilter=button.dataset.filter;renderCollections();}));
+function renderHero(type='squishy') {
+  const settings=type==='slime'?{...defaults,type:'slime',shape:'jar',color:'#c4e3f4',accent:'#f9e6a6',texture:'cloud',garnish:'sprinkles',name:'Corner Shop Clouds'}:{...defaults};
+  drawToy($('#hero-toy'),settings,{background:false});
+  $('#hero-product-name').textContent=settings.name;
+  $('#hero-toy').setAttribute('aria-label',`${settings.name}, a pixel ${type} concept`);
+  $$('[data-hero]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.hero===type)));
+}
+$$('[data-hero]').forEach(button=>button.addEventListener('click',()=>renderHero(button.dataset.hero)));
+
 
 function renderBag() {
   const root = $('#bag-items'); root.replaceChildren();
@@ -436,4 +486,4 @@ $('#clear-responses').addEventListener('click', () => { store.responses = []; pe
 $('#about-demo').addEventListener('click',()=>showMessage('About this concept demo','REPLAY LAB is a student business proposal, not an operating store. Product images are original pixel illustrations. Prices, progress, reservations and production thresholds are illustrative; no payments or orders are accepted.'));
 
 function loadSharedDesign(){const raw=new URLSearchParams(location.search).get('design');if(!raw)return;try{if(raw.length>5000)throw new Error();const parsed=JSON.parse(decodeURIComponent(escape(atob(raw))));design=cleanDesign(parsed,true);store.draft=clone(design);persist();history=[clone(design)];historyIndex=0;}catch{toast('That shared design link could not be read.');}}
-loadSharedDesign(); drawRoom($('#room-canvas')); renderCollections(); renderResponseSummary(); updateBagCount(); route();
+renderHero(); loadSharedDesign(); drawRoom($('#room-canvas')); renderCollections(); renderResponseSummary(); updateBagCount(); route();
