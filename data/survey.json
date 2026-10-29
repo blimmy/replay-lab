@@ -1,0 +1,581 @@
+{
+  "schemaVersion": "1.0",
+  "id": "replay-lab-consumer-survey",
+  "title": "REPLAY LAB: toys, memories and choices",
+  "language": "en",
+  "estimatedMinutes": "3–5, plus optional demo feedback",
+  "researchStatus": "Instrument only; no responses have been collected by its creation.",
+  "privacy": {
+    "collectNames": false,
+    "collectEmail": false,
+    "collectPhone": false,
+    "storage": "This static demo stores answers locally. Export and share voluntarily; no central submission occurs.",
+    "declinedConsent": "Do not retain or export a research response."
+  },
+  "instructions": {
+    "showSectionDescriptionBeforeQuestions": true,
+    "lockConceptUntilBehaviourComplete": true,
+    "showIf": "Show only when answers[showIf.id] is in showIf.values. Clear hidden answers before export.",
+    "stopIfValues": "End immediately if the answer is listed. Do not export a research response for ineligible or non-consenting visitors.",
+    "exclusiveValues": "If an exclusive option is selected, no other checkbox option may remain selected.",
+    "encoding": "Options are exported as stable values; multi-selects are JSON arrays."
+  },
+  "sections": [
+    {
+      "id": "screen",
+      "title": "Before we begin",
+      "description": "This voluntary class study asks about toy buying and a proposed service. It takes about 3–5 minutes, plus optional demo feedback. No name, email or phone number is requested. You may leave at any time. This demo keeps answers on your device; to give them to the researcher, export the response and share it yourself. A demo submission is not sent to a research database.",
+      "questions": [
+        {
+          "id": "consent",
+          "label": "May your anonymous answers be used for this class project?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes, I agree"
+            },
+            {
+              "value": "no",
+              "label": "No, I do not agree"
+            }
+          ],
+          "stopIfValues": [
+            "no"
+          ],
+          "stopMessage": "Thank you. The survey ends here; no research response should be retained."
+        },
+        {
+          "id": "adult",
+          "label": "Are you 18 or older?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "prefer_not",
+              "label": "Prefer not to answer"
+            }
+          ],
+          "stopIfValues": [
+            "no",
+            "prefer_not"
+          ],
+          "stopMessage": "This study is for adults aged 18 or older. The survey ends here."
+        },
+        {
+          "id": "employment",
+          "label": "Which best describes your current work situation?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "full_time",
+              "label": "Working full-time"
+            },
+            {
+              "value": "part_time",
+              "label": "Working part-time"
+            },
+            {
+              "value": "self_employed",
+              "label": "Self-employed / freelance"
+            },
+            {
+              "value": "working_student",
+              "label": "Studying and working"
+            },
+            {
+              "value": "not_working",
+              "label": "Not currently working"
+            },
+            {
+              "value": "prefer_not",
+              "label": "Prefer not to answer"
+            }
+          ],
+          "stopIfValues": [
+            "not_working",
+            "prefer_not"
+          ],
+          "stopMessage": "This survey focuses on adults who are currently working. Thank you; the survey ends here."
+        }
+      ]
+    },
+    {
+      "id": "behaviour",
+      "title": "Your experience before this concept",
+      "description": "Please answer about what actually happened, before reading the REPLAY LAB idea. Squishy means a soft squeezable toy; Slime means a stretchable sensory play material. There are no right answers.",
+      "questions": [
+        {
+          "id": "prior_concept_exposure",
+          "label": "Before starting this survey, had you already seen the REPLAY LAB idea or website demo?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "not_sure",
+              "label": "Not sure"
+            }
+          ]
+        },
+        {
+          "id": "age_band",
+          "label": "Which age band are you in?",
+          "type": "radio",
+          "required": false,
+          "options": [
+            {
+              "value": "18_24",
+              "label": "18–24"
+            },
+            {
+              "value": "25_34",
+              "label": "25–34"
+            },
+            {
+              "value": "35_44",
+              "label": "35–44"
+            },
+            {
+              "value": "45_plus",
+              "label": "45 or older"
+            },
+            {
+              "value": "prefer_not",
+              "label": "Prefer not to answer"
+            }
+          ]
+        },
+        {
+          "id": "purchase_recency",
+          "label": "When did you last buy a Squishy or Slime?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "past_3_months",
+              "label": "Within the past 3 months"
+            },
+            {
+              "value": "4_to_12_months",
+              "label": "4–12 months ago"
+            },
+            {
+              "value": "over_12_months",
+              "label": "More than 12 months ago"
+            },
+            {
+              "value": "never",
+              "label": "I have never bought either"
+            }
+          ]
+        },
+        {
+          "id": "purchase_purpose",
+          "label": "What was the MAIN purpose of your most recent purchase?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "personal_use",
+              "label": "My own use / enjoyment"
+            },
+            {
+              "value": "collecting",
+              "label": "My collection / display"
+            },
+            {
+              "value": "gift",
+              "label": "A gift for someone else"
+            },
+            {
+              "value": "resale",
+              "label": "Resale / business stock"
+            },
+            {
+              "value": "other",
+              "label": "Another purpose"
+            },
+            {
+              "value": "not_sure",
+              "label": "Not sure / do not remember"
+            }
+          ],
+          "showIf": {
+            "id": "purchase_recency",
+            "values": [
+              "past_3_months",
+              "4_to_12_months",
+              "over_12_months"
+            ]
+          }
+        },
+        {
+          "id": "purchase_trigger",
+          "label": "What first drew your attention to the item you most recently bought?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "social_review",
+              "label": "A social-media review or creator video"
+            },
+            {
+              "value": "social_ad",
+              "label": "A social-media advertisement"
+            },
+            {
+              "value": "friend",
+              "label": "A friend, family member or colleague"
+            },
+            {
+              "value": "store",
+              "label": "Seeing it in a shop / market"
+            },
+            {
+              "value": "search",
+              "label": "Searching for it myself"
+            },
+            {
+              "value": "existing_hobby",
+              "label": "An existing hobby / collection"
+            },
+            {
+              "value": "other",
+              "label": "Something else"
+            },
+            {
+              "value": "not_sure",
+              "label": "I do not remember"
+            }
+          ],
+          "showIf": {
+            "id": "purchase_recency",
+            "values": [
+              "past_3_months",
+              "4_to_12_months",
+              "over_12_months"
+            ]
+          }
+        },
+        {
+          "id": "purchase_reasons",
+          "label": "Which reasons influenced that purchase? Choose up to TWO.",
+          "type": "checkbox",
+          "required": true,
+          "options": [
+            {
+              "value": "feel",
+              "label": "I liked the feel / sensory experience"
+            },
+            {
+              "value": "appearance",
+              "label": "I liked its appearance"
+            },
+            {
+              "value": "relaxation",
+              "label": "I wanted something enjoyable for a break"
+            },
+            {
+              "value": "memory",
+              "label": "It reminded me of childhood"
+            },
+            {
+              "value": "collection",
+              "label": "I wanted to add to a collection"
+            },
+            {
+              "value": "social",
+              "label": "People I follow or know were interested in it"
+            },
+            {
+              "value": "gift",
+              "label": "Someone else wanted it"
+            },
+            {
+              "value": "resale",
+              "label": "I intended to resell it"
+            },
+            {
+              "value": "other",
+              "label": "Another reason"
+            },
+            {
+              "value": "not_sure",
+              "label": "I do not remember"
+            }
+          ],
+          "showIf": {
+            "id": "purchase_recency",
+            "values": [
+              "past_3_months",
+              "4_to_12_months",
+              "over_12_months"
+            ]
+          },
+          "maxSelections": 2,
+          "exclusiveValues": [
+            "not_sure"
+          ]
+        },
+        {
+          "id": "childhood_experience",
+          "label": "Before adulthood, what was your experience of Squishy or Slime?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "owned",
+              "label": "I owned or played with it"
+            },
+            {
+              "value": "wanted",
+              "label": "I wanted it but did not own it"
+            },
+            {
+              "value": "knew_not_interested",
+              "label": "I knew about it but was not interested"
+            },
+            {
+              "value": "unfamiliar",
+              "label": "I was not familiar with it"
+            },
+            {
+              "value": "not_sure",
+              "label": "I do not remember"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concept",
+      "title": "Now consider the REPLAY LAB idea",
+      "description": "REPLAY LAB is a proposed service for working adults. Customers help choose a shared childhood-memory theme, then personalise a Squishy or Slime design with colour and texture options. The business shows a prototype and an estimated delivery date before taking real pre-orders. Production would begin only if the announced order threshold is met; otherwise customers would receive a refund under the stated terms. The website you may see is a demo: its votes and pre-orders do not reserve products or take payment.",
+      "questions": [
+        {
+          "id": "product_choice",
+          "label": "Which would you choose for this concept, if any?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "squishy",
+              "label": "Squishy"
+            },
+            {
+              "value": "slime",
+              "label": "Slime"
+            },
+            {
+              "value": "neither",
+              "label": "Neither"
+            },
+            {
+              "value": "not_sure",
+              "label": "Not sure"
+            }
+          ]
+        },
+        {
+          "id": "purchase_interest",
+          "label": "How likely would you be to consider buying from this service?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            {
+              "value": "very_unlikely",
+              "label": "Very unlikely"
+            },
+            {
+              "value": "unlikely",
+              "label": "Unlikely"
+            },
+            {
+              "value": "neither",
+              "label": "Neither likely nor unlikely"
+            },
+            {
+              "value": "likely",
+              "label": "Likely"
+            },
+            {
+              "value": "very_likely",
+              "label": "Very likely"
+            },
+            {
+              "value": "not_sure",
+              "label": "Not enough information to decide"
+            }
+          ]
+        },
+        {
+          "id": "valued_features",
+          "label": "Which features, if any, would matter most to you? Choose up to TWO.",
+          "type": "checkbox",
+          "required": true,
+          "options": [
+            {
+              "value": "memory",
+              "label": "A design linked to a childhood memory"
+            },
+            {
+              "value": "choice",
+              "label": "Choosing colour and texture"
+            },
+            {
+              "value": "prototype",
+              "label": "Seeing a prototype before ordering"
+            },
+            {
+              "value": "low_batch",
+              "label": "Production only after enough orders"
+            },
+            {
+              "value": "quiet",
+              "label": "A quiet / unscented option"
+            },
+            {
+              "value": "price",
+              "label": "An affordable total price"
+            },
+            {
+              "value": "quality",
+              "label": "Clear material and care information"
+            },
+            {
+              "value": "none",
+              "label": "None of these"
+            },
+            {
+              "value": "other",
+              "label": "Something else"
+            }
+          ],
+          "maxSelections": 2,
+          "exclusiveValues": [
+            "none"
+          ]
+        },
+        {
+          "id": "max_price_thb",
+          "label": "For the hypothetical item described below, what is the highest TOTAL price in THB you would consider paying?",
+          "type": "number",
+          "required": false,
+          "showIf": {
+            "id": "product_choice",
+            "values": [
+              "squishy",
+              "slime"
+            ]
+          },
+          "description": "For the next price question, imagine one palm-sized Squishy (about 7 cm) OR one 90 ml Slime jar, according to your selection. It has a shared childhood-themed design, your selected colour and texture, a simple gift box and domestic shipping included. This is a hypothetical specification for research, not a product offer. No delivery date is promised by this survey.",
+          "placeholder": "Enter 0 if you would not pay; leave blank if unsure.",
+          "min": 0,
+          "max": 100000,
+          "step": 1
+        },
+        {
+          "id": "main_hesitation",
+          "label": "What would make you hesitate or decide not to buy?",
+          "type": "textarea",
+          "required": false,
+          "maxLength": 500,
+          "placeholder": "For example, anything unclear or unsuitable. Your own words are most useful."
+        }
+      ]
+    },
+    {
+      "id": "usability",
+      "title": "Optional: feedback on the demo",
+      "description": "These questions concern the website experience. They do not measure real sales or confirmed demand. Skip them if you have not used the demo.",
+      "questions": [
+        {
+          "id": "tried_demo",
+          "label": "Have you tried creating or saving a design in the demo?",
+          "type": "radio",
+          "required": false,
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            }
+          ]
+        },
+        {
+          "id": "demo_ease",
+          "label": "How easy or difficult was it to create and save a design?",
+          "type": "radio",
+          "required": false,
+          "options": [
+            {
+              "value": "very_difficult",
+              "label": "Very difficult"
+            },
+            {
+              "value": "difficult",
+              "label": "Difficult"
+            },
+            {
+              "value": "neutral",
+              "label": "Neither easy nor difficult"
+            },
+            {
+              "value": "easy",
+              "label": "Easy"
+            },
+            {
+              "value": "very_easy",
+              "label": "Very easy"
+            },
+            {
+              "value": "not_completed",
+              "label": "I could not finish / did not try saving"
+            }
+          ],
+          "showIf": {
+            "id": "tried_demo",
+            "values": [
+              "yes"
+            ]
+          }
+        },
+        {
+          "id": "demo_change",
+          "label": "What is one thing you would change about the demo?",
+          "type": "textarea",
+          "required": false,
+          "showIf": {
+            "id": "tried_demo",
+            "values": [
+              "yes"
+            ]
+          },
+          "maxLength": 500
+        }
+      ]
+    }
+  ],
+  "completionMessage": "Thank you. These answers remain on this device. Download your response if you want to share it with the researcher. No order or payment has been made."
+}
