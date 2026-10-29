@@ -12,7 +12,7 @@ Research corner contains an English consent-screened, branching questionnaire. P
 
 ## Class materials
 
-The downloads folder contains the redesigned professional deck with editable text, tables and diagrams, script and questionnaire, PDF copies, fieldwork worksheets, a trend canvas and a complete ZIP pack. The 18-slide deck embeds a 25-second order-demo MP4 on slide 11. The expanded 1,112-word script targets 8:00 including narration over the demo and the spoken source slide. Each of the 18 slides has a separate SAY THIS page; the PowerPoint notes contain the same narration. The silent clip has English on-screen captions and is also playable on the homepage and downloadable separately. The final recording must be timed. Original fieldwork is still pending; replace slide 4 with real evidence before submitting the assignment.
+The downloads folder contains the redesigned professional deck with editable text, tables and diagrams, script and questionnaire, PDF copies, fieldwork worksheets, a trend canvas and a complete ZIP pack. The 18-slide deck embeds a 25-second order-demo MP4 on slide 11. The expanded 1,105-word script targets 8:00 including narration over the demo and the spoken source slide. Each of the 18 slides has a separate SAY THIS page; the PowerPoint notes contain the same narration. The silent clip has English on-screen captions and is also playable on the homepage and downloadable separately. The final recording must be timed. Slide 4 includes the presenter’s informal market interview as an English paraphrase. Market name, interview date and interviewee role are not yet supplied; this is not a customer count or proof of purchases.
 
 ## Run locally
 
